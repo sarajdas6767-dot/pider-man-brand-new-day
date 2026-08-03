@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spider-Man: Brand New Day | Official Stream</title>
+    
+    <meta name="description" content="Watch Spider-Man: Brand New Day - The Ultimate Fan Film Experience in 4K Ultra HD. Stream exclusively now.">
+    <meta property="og:title" content="Spider-Man: Brand New Day | Official OTT Platform">
+    <meta property="og:description" content="Stream Spider-Man: Brand New Day in 4K with premium glassmorphism UI experience.">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1604200213928-ba3cf4fc8436?auto=format&fit=crop&w=1200&q=80">
+    <meta property="og:type" content="video.movie">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
+                    colors: {
+                        brand: {
+                            red: '#E50914',
+                            darkRed: '#B81D24',
+                            black: '#08080A',
+                            card: '#121216',
+                            glass: 'rgba(18, 18, 22, 0.7)'
+                        }
+                    },
+                    boxShadow: {
+                        'glow': '0 0 25px -5px rgba(229, 9, 20, 0.5)',
+                        'glow-lg': '0 0 50px -10px rgba(229, 9, 20, 0.6)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" />
+    <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <style>
+        /* Custom UI Tweaks & Animations */
+        body { background-color: #08080A; color: #F3F4F6; overflow-x: hidden; }
+        .glassmorphism {
+            background: rgba(12, 12, 15, 0.65);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .glass-card:hover {
+            border-color: rgba(229, 9, 20, 0.4);
+            box-shadow: 0 0 20px -5px rgba(229, 9, 20, 0.3);
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #08080A; }
+        ::-webkit-scrollbar-thumb { background: #222; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #E50914; }
+
+        /* Custom Video Player Styling */
+        .video-js { width: 100%; height: 100%; border-radius: 12px; overflow: hidden; }
+        .vjs-matrix.video-js { color: #E50914; }
+        .vjs-matrix .vjs-big-play-button { background-color: rgba(229, 9, 20, 0.8); border: none; border-radius: 50%; width: 70px; height: 70px; line-height: 70px; margin-top: -35px; margin-left: -35px; }
+    </style>
+</head>
+<body x-data="appData()" class="antialiased selection:bg-brand-red selection:text-white">
+
+    <header class="fixed top-0 w-full z-50 transition-all duration-300" :class="{ 'glassmorphism py-3 shadow-2xl': scrolled, 'bg-transparent py-5': !scrolled }">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+            <div class="flex items-center space-x-10">
+                <a href="#" class="flex items-center space-x-2">
+                    <span class="text-3xl font-black tracking-tighter text-white">SPIDER<span class="text-brand-red">STREAM</span></span>
+                </a>
+                <nav class="hidden lg:flex space-x-8 text-sm font-semibold text-gray-300">
+                    <a href="#hero" class="hover:text-brand-red transition">Home</a>
+                    <a href="#trailer" class="hover:text-brand-red transition">Trailer</a>
+                    <a href="#movies" class="hover:text-brand-red transition">Explore</a>
+                    <a href="#gallery" class="hover:text-brand-red transition">Gallery</a>
+                    <a href="#cast" class="hover:text-brand-red transition">Cast</a>
+                    <a href="#faq" class="hover:text-brand-red transition">FAQ</a>
+                </nav>
+            </div>
+
+            <div class="flex items-center space-x-4">
+                <button @click="showAuthModal = true" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium transition" x-show="!userLoggedIn">
+                    Sign In
+                </button>
+                
+                <template x-if="!hasUnlocked">
+                    <button @click="initiateRazorpay()" class="relative group overflow-hidden rounded-full p-[1px] focus:outline-none">
+                        <span class="absolute inset-0 bg-gradient-to-r from-brand-red to-red-800 rounded-full animate-pulse"></span>
+                        <span class="relative px-5 py-2.5 rounded-full bg-brand-black flex items-center space-x-2 transition group-hover:bg-transparent">
+                            <i class="fa-solid fa-lock text-brand-red group-hover:text-white transition"></i>
+                            <span class="text-xs font-bold uppercase tracking-wider text-white">Unlock ₹49</span>
+                        </span>
+                    </button>
+                </template>
+
+                <template x-if="hasUnlocked">
+                    <button @click="activeTab = 'dashboard'" class="px-4 py-2 bg-brand-red/20 border border-brand-red text-brand-red text-xs font-bold rounded-full uppercase tracking-wider">
+                        <i class="fa-solid fa-user-gear mr-1"></i> Dashboard
+                    </button>
+                </template>
+
+                <button @click="mobileMenuOpen = !mobileMenuOpen" class="lg:hidden text-gray-300 hover:text-white text-2xl focus:outline-none">
+                    <i class="fa-solid" :class="mobileMenuOpen ? 'fa-xmark' : 'fa-bars'"></i>
+                </button>
+            </div>
+        </div>
+
+        <div x-show="mobileMenuOpen" x-transition class="lg:hidden glassmorphism px-6 py-6 space-y-4">
+            <a href="#hero" @click="mobileMenuOpen = false" class="block text-gray-300 hover:text-brand-red font-medium">Home</a>
+            <a href="#trailer" @click="mobileMenuOpen = false" class="block text-gray-300 hover:text-brand-red font-medium">Trailer</a>
+            <a href="#movies" @click="mobileMenuOpen = false" class="block text-gray-300 hover:text-brand-red font-medium">Explore</a>
+            <a href="#gallery" @click="mobileMenuOpen = false" class="block text-gray-300 hover:text-brand-red font-medium">Gallery</a>
+            <a href="#cast" @click="mobileMenuOpen = false" class="block text-gray-300 hover:text-brand-red font-medium">Cast</a>
+        </div>
+    </header>
+
+    <main x-show="activeTab === 'home'">
+        
+        <section id="hero" class="relative min-h-screen flex items-center justify-start overflow-hidden pt-20">
+            <div class="absolute inset-0 z-0">
+                <img :src="movieData.bannerUrl" class="w-full h-full object-cover object-top scale-105 transform transition duration-1000" id="heroBanner">
+                <div class="absolute inset-0 bg-gradient-to-r from-brand-black via-brand-black/80 to-transparent"></div>
+                <div class="absolute inset-0 bg-gradient-to-t from-brand-black via-transparent to-transparent"></div>
+            </div>
+
+            <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div class="max-w-2xl space-y-6">
+                    <div class="flex items-center space-x-3" id="heroBadges">
+                        <span class="px-3 py-1 bg-brand-red text-white text-xs font-black uppercase tracking-widest rounded-md">Exclusive</span>
+                        <span class="px-3 py-1 glass-card text-gray-300 text-xs font-bold rounded-md"><i class="fa-solid fa-star text-yellow-500 mr-1"></i> <span x-text="movieData.rating"></span></span>
+                        <span class="px-3 py-1 glass-card text-gray-300 text-xs font-bold rounded-md" x-text="movieData.runtime"></span>
+                        <span class="px-3 py-1 glass-card text-gray-300 text-xs font-bold rounded-md" x-text="movieData.genre"></span>
+                    </div>
+
+                    <h1 class="text-5xl sm:text-7xl font-black text-white tracking-tight leading-none" id="heroTitle">
+                        <span x-text="movieData.title"></span>
+                        <span class="block text-brand-red text-3xl sm:text-4xl font-extrabold mt-2" x-text="movieData.subtitle"></span>
+                    </h1>
+
+                    <p class="text-gray-300 text-base sm:text-lg font-light leading-relaxed line-clamp-3" id="heroDesc" x-text="movieData.description"></p>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 py-2 text-xs text-gray-400 font-medium">
+                        <div><span class="block text-gray-500">Director</span><span class="text-gray-200 font-bold" x-text="movieData.director"></span></div>
+                        <div><span class="block text-gray-500">Language</span><span class="text-gray-200 font-bold" x-text="movieData.language"></span></div>
+                        <div><span class="block text-gray-500">Release Date</span><span class="text-gray-200 font-bold" x-text="movieData.releaseDate"></span></div>
+                        <div><span class="block text-gray-500">Quality</span><span class="text-gray-200 font-bold">4K Ultra HD</span></div>
+                    </div>
+
+                    <div class="flex flex-wrap gap-4 pt-4" id="heroButtons">
+                        <template x-if="!hasUnlocked">
+                            <button @click="initiateRazorpay()" class="px-8 py-4 bg-brand-red hover:bg-brand-darkRed text-white font-extrabold rounded-xl shadow-glow hover:shadow-glow-lg transition flex items-center space-x-3 transform hover:-translate-y-0.5">
+                                <i class="fa-solid fa-unlock-keyhole"></i>
+                                <span>Unlock Full Movie – ₹49</span>
+                            </button>
+                        </template>
+
+                        <template x-if="hasUnlocked">
+                            <button @click="openVideoPlayer()" class="px-8 py-4 bg-brand-red hover:bg-brand-darkRed text-white font-extrabold rounded-xl shadow-glow hover:shadow-glow-lg transition flex items-center space-x-3 transform hover:-translate-y-0.5">
+                                <i class="fa-solid fa-play text-lg"></i>
+                                <span>Stream Now (4K)</span>
+                            </button>
+                        </template>
+
+                        <a href="#trailer" class="px-8 py-4 glassmorphism hover:bg-white/10 text-white font-bold rounded-xl transition flex items-center space-x-3">
+                            <i class="fa-solid fa-film"></i>
+                            <span>Watch Trailer</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="trailer" class="py-20 bg-brand-black/80 border-t border-white/5">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-10">
+                    <span class="text-brand-red font-bold text-xs uppercase tracking-widest">Preview Video</span>
+                    <h2 class="text-3xl font-extrabold text-white mt-1">Official Trailer</h2>
+                    <p class="text-gray-400 text-sm mt-2">Watch the official high-definition preview before unlocking full streaming access.</p>
+                </div>
+
+                <div class="relative aspect-video rounded-2xl overflow-hidden glassmorphism shadow-2xl border border-white/10">
+                    <iframe 
+                        class="w-full h-full"
+                        :src="movieData.trailerUrl" 
+                        title="Spider-Man: Brand New Day Official Trailer" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                        allowfullscreen
+                        loading="lazy">
+                    </iframe>
+                </div>
+            </div>
+        </section>
+
+        <section id="movies" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+            <div>
+                <h3 class="text-xl font-bold text-white mb-6 flex items-center">
+                    <span class="w-1 h-6 bg-brand-red rounded-full mr-3"></span>
+                    Trending Movies & Fan Films
+                </h3>
+                <div class="swiper trendingSwiper">
+                    <div class="swiper-wrapper">
+                        <template x-for="(movie, index) in trendingList" :key="index">
+                            <div class="swiper-slide">
+                                <div class="glass-card rounded-xl overflow-hidden group cursor-pointer relative" @click="openMovieDetails(movie)">
+                                    <img :src="movie.image" class="w-full h-80 object-cover group-hover:scale-105 transition duration-500">
+                                    <div class="absolute inset-0 bg-gradient-to-t from-brand-black via-transparent opacity-0 group-hover:opacity-100 transition duration-300 p-4 flex flex-col justify-end">
+                                        <span class="text-xs font-bold text-brand-red" x-text="movie.genre"></span>
+                                        <h4 class="text-base font-bold text-white" x-text="movie.title"></h4>
+                                        <p class="text-xs text-gray-300 mt-1 line-clamp-2" x-text="movie.desc"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <h3 class="text-xl font-bold text-white mb-6 flex items-center">
+                    <span class="w-1 h-6 bg-brand-red rounded-full mr-3"></span>
+                    Behind The Scenes & Making
+                </h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="glass-card p-4 rounded-xl flex space-x-4 items-center">
+                        <div class="w-20 h-20 rounded-lg bg-red-900/40 flex items-center justify-center text-brand-red text-2xl font-bold flex-shrink-0">
+                            <i class="fa-solid fa-clapperboard"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-white text-sm">Suit Design Process</h4>
+                            <p class="text-xs text-gray-400 mt-1">Creating Peter's updated homemade suit in full detail.</p>
+                        </div>
+                    </div>
+                    <div class="glass-card p-4 rounded-xl flex space-x-4 items-center">
+                        <div class="w-20 h-20 rounded-lg bg-red-900/40 flex items-center justify-center text-brand-red text-2xl font-bold flex-shrink-0">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-white text-sm">VFX Breakdown</h4>
+                            <p class="text-xs text-gray-400 mt-1">Behind the web-slinging and CGI action sequences.</p>
+                        </div>
+                    </div>
+                    <div class="glass-card p-4 rounded-xl flex space-x-4 items-center">
+                        <div class="w-20 h-20 rounded-lg bg-red-900/40 flex items-center justify-center text-brand-red text-2xl font-bold flex-shrink-0">
+                            <i class="fa-solid fa-music"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-white text-sm">Original Score Recording</h4>
+                            <p class="text-xs text-gray-400 mt-1">Building the cinematic theme for Peter's solo journey.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="gallery" class="py-20 bg-brand-black/50 border-t border-white/5">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <span class="text-brand-red font-bold text-xs uppercase tracking-widest">Stills & Set Photos</span>
+                    <h2 class="text-3xl font-extrabold text-white mt-1">Production Gallery</h2>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                    <template x-for="(img, idx) in galleryImages" :key="idx">
+                        <div @click="activeLightboxImg = img" class="relative group cursor-pointer overflow-hidden rounded-xl glass-card border border-white/10">
+                            <img :src="img" class="w-full h-64 object-cover transform group-hover:scale-110 transition duration-500">
+                            <div class="absolute inset-0 bg-brand-red/20 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center">
+                                <i class="fa-solid fa-magnifying-glass-plus text-2xl text-white"></i>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </section>
+
+        <section id="cast" class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-extrabold text-white mb-10 text-center">Cast & Lead Crew</h2>
+            <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-6">
+                <template x-for="person in castList" :key="person.name">
+                    <div class="glass-card p-4 rounded-xl text-center group">
+                        <img :src="person.image" class="w-20 h-20 rounded-full mx-auto object-cover border-2 border-brand-red/50 group-hover:border-brand-red transition">
+                        <h4 class="text-sm font-bold text-white mt-3" x-text="person.name"></h4>
+                        <p class="text-xs text-gray-400 mt-1" x-text="person.role"></p>
+                    </div>
+                </template>
+            </div>
+        </section>
+
+        <section id="faq" class="py-20 bg-brand-black/60 border-t border-white/5">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl font-extrabold text-white text-center mb-10">Frequently Asked Questions</h2>
+                <div class="space-y-4">
+                    <div class="glass-card p-5 rounded-xl">
+                        <h3 class="font-bold text-white">How do I unlock the full movie?</h3>
+                        <p class="text-sm text-gray-400 mt-2">Click on the "Unlock Movie – ₹49" button. Complete the quick payment using Razorpay, and access will automatically unlock instantly.</p>
+                    </div>
+                    <div class="glass-card p-5 rounded-xl">
+                        <h3 class="font-bold text-white">Is it a one-time payment or subscription?</h3>
+                        <p class="text-sm text-gray-400 mt-2">It is a one-time pass of ₹49 for lifetime streaming access to this fan film.</p>
+                    </div>
+                    <div class="glass-card p-5 rounded-xl">
+                        <h3 class="font-bold text-white">Can I stream on mobile devices?</h3>
+                        <p class="text-sm text-gray-400 mt-2">Yes! The platform is 100% responsive and optimized for mobile browsers, tablets, laptops, and smart TV browsers.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <section x-show="activeTab === 'dashboard'" class="min-h-screen pt-28 px-4 max-w-7xl mx-auto space-y-8">
+        <div class="flex justify-between items-center border-b border-white/10 pb-4">
+            <div>
+                <h1 class="text-3xl font-bold text-white">Admin & Revenue Dashboard</h1>
+                <p class="text-xs text-gray-400 mt-1">Manage film settings, content links, and monitor sales analytics.</p>
+            </div>
+            <button @click="activeTab = 'home'" class="px-4 py-2 glassmorphism hover:bg-white/10 text-xs font-bold text-white rounded-lg">
+                ← Back to Movie Platform
+            </button>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-4 gap-6">
+            <div class="glass-card p-5 rounded-xl border-l-4 border-brand-red">
+                <span class="text-xs text-gray-400 font-bold block">Total Revenue</span>
+                <span class="text-2xl font-black text-white mt-1 block">₹24,510</span>
+            </div>
+            <div class="glass-card p-5 rounded-xl border-l-4 border-green-500">
+                <span class="text-xs text-gray-400 font-bold block">Total Purchases</span>
+                <span class="text-2xl font-black text-white mt-1 block">500 Users</span>
+            </div>
+            <div class="glass-card p-5 rounded-xl border-l-4 border-yellow-500">
+                <span class="text-xs text-gray-400 font-bold block">Trailer Views</span>
+                <span class="text-2xl font-black text-white mt-1 block">21.5M</span>
+            </div>
+            <div class="glass-card p-5 rounded-xl border-l-4 border-blue-500">
+                <span class="text-xs text-gray-400 font-bold block">Streaming Servers</span>
+                <span class="text-2xl font-black text-white mt-1 block">Active (100%)</span>
+            </div>
+        </div>
+
+        <div class="glassmorphism p-6 rounded-2xl space-y-6">
+            <h2 class="text-lg font-bold text-white border-b border-white/10 pb-3">Edit Movie Settings</h2>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs text-gray-400 font-bold mb-1">Movie Title</label>
+                    <input type="text" x-model="movieData.title" class="w-full bg-black/50 border border-white/10 rounded-lg p-2.5 text-sm text-white focus:border-brand-red focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs text-gray-400 font-bold mb-1">Subtitle</label>
+                    <input type="text" x-model="movieData.subtitle" class="w-full bg-black/50 border border-white/10 rounded-lg p-2.5 text-sm text-white focus:border-brand-red focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs text-gray-400 font-bold mb-1">YouTube Trailer Embed URL</label>
+                    <input type="text" x-model="movieData.trailerUrl" class="w-full bg-black/50 border border-white/10 rounded-lg p-2.5 text-sm text-white focus:border-brand-red focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs text-gray-400 font-bold mb-1">Stream Video Source URL (.mp4)</label>
+                    <input type="text" x-model="movieData.streamUrl" class="w-full bg-black/50 border border-white/10 rounded-lg p-2.5 text-sm text-white focus:border-brand-red focus:outline-none">
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs text-gray-400 font-bold mb-1">Movie Storyline Description</label>
+                <textarea x-model="movieData.description" rows="3" class="w-full bg-black/50 border border-white/10 rounded-lg p-2.5 text-sm text-white focus:border-brand-red focus:outline-none"></textarea>
+            </div>
+
+            <button @click="alert('Settings Saved Successfully!')" class="px-6 py-2.5 bg-brand-red hover:bg-brand-darkRed text-white text-xs font-bold rounded-lg transition">
+                Save Changes
+            </button>
+        </div>
+    </section>
+
+    <footer class="border-t border-white/5 py-12 bg-brand-black">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6 text-xs text-gray-500">
+            <div>
+                <span class="text-lg font-bold text-white">SPIDER<span class="text-brand-red">STREAM</span></span>
+                <p class="mt-1">Independent fan film project. Not affiliated with Marvel Studios or Sony Pictures.</p>
+            </div>
+            <div class="flex space-x-6">
+                <a href="#" class="hover:text-gray-300">Privacy Policy</a>
+                <a href="#" class="hover:text-gray-300">Terms of Service</a>
+                <a href="#" class="hover:text-gray-300">Support & Contact</a>
+            </div>
+        </div>
+    </footer>
+
+    <div x-show="showPlayerModal" x-transition class="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4">
+        <button @click="closeVideoPlayer()" class="absolute top-6 right-6 text-white text-3xl z-50 hover:text-brand-red transition">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        
+        <div class="w-full max-w-5xl aspect-video relative">
+            <video id="fullMoviePlayer" class="video-js vjs-matrix vjs-big-play-centered" controls preload="auto">
+                <source :src="movieData.streamUrl" type="video/mp4" />
+            </video>
+        </div>
+    </div>
+
+    <div x-show="activeLightboxImg" x-transition @click="activeLightboxImg = null" class="fixed inset-0 z-50 glassmorphism bg-black/90 flex items-center justify-center p-4">
+        <div class="relative max-w-4xl w-full">
+            <img :src="activeLightboxImg" class="w-full h-auto max-h-[85vh] object-contain rounded-xl">
+            <button @click="activeLightboxImg = null" class="absolute -top-10 right-0 text-white text-2xl hover:text-brand-red">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+    </div>
+
+    <div x-show="showAuthModal" x-transition class="fixed inset-0 z-50 glassmorphism flex items-center justify-center p-4">
+        <div class="bg-brand-card p-8 rounded-2xl border border-white/10 max-w-md w-full space-y-6 relative">
+            <button @click="showAuthModal = false" class="absolute top-4 right-4 text-gray-400 hover:text-white">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <h3 class="text-xl font-bold text-white text-center">Sign In to SpiderStream</h3>
+            <div class="space-y-4">
+                <input type="email" placeholder="Email Address" class="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-sm text-white focus:border-brand-red focus:outline-none">
+                <input type="password" placeholder="Password" class="w-full bg-black/50 border border-white/10 rounded-lg p-3 text-sm text-white focus:border-brand-red focus:outline-none">
+                <button @click="userLoggedIn = true; showAuthModal = false" class="w-full py-3 bg-brand-red hover:bg-brand-darkRed text-white font-bold rounded-lg transition">
+                    Sign In
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function appData() {
+            return {
+                scrolled: false,
+                mobileMenuOpen: false,
+                hasUnlocked: false,
+                userLoggedIn: false,
+                showAuthModal: false,
+                showPlayerModal: false,
+                activeTab: 'home',
+                activeLightboxImg: null,
+                playerInstance: null,
+
+                movieData: {
+                    title: "Spider-Man",
+                    subtitle: "Brand New Day",
+                    rating: "9.2/10",
+                    runtime: "1h 45m",
+                    genre: "Action / Sci-Fi",
+                    language: "English / Hindi",
+                    releaseDate: "2026 Edition",
+                    director: "Jane Doe",
+                    description: "Following the aftermath of forgotten memories, Peter Parker navigates his journey completely alone in New York, confronting emerging criminal factions and new MCU threats.",
+                    bannerUrl: "https://images.unsplash.com/photo-1604200213928-ba3cf4fc8436?auto=format&fit=crop&w=1920&q=80",
+                    trailerUrl: "https://www.youtube-nocookie.com/embed/daXaTug8rL4",
+                    streamUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4"
+                },
+
+                trendingList: [
+                    { title: "Spider-Man: Brand New Day", genre: "Fan Film", image: "https://images.unsplash.com/photo-1604200213928-ba3cf4fc8436?auto=format&fit=crop&w=600&q=80", desc: "Peter Parker's solo journey." },
+                    { title: "Symbiote Rising", genre: "Action", image: "https://images.unsplash.com/photo-1635863138275-d9b33299680b?auto=format&fit=crop&w=600&q=80", desc: "Dark thriller adventure." },
+                    { title: "Web of Shadows", genre: "Drama", image: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=600&q=80", desc: "A street-level battle in NYC." }
+                ],
+
+                galleryImages: [
+                    "https://images.unsplash.com/photo-1604200213928-ba3cf4fc8436?auto=format&fit=crop&w=800&q=80",
+                    "https://images.unsplash.com/photo-1635863138275-d9b33299680b?auto=format&fit=crop&w=800&q=80",
+                    "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=800&q=80"
+                ],
+
+                castList: [
+                    { name: "John Smith", role: "Peter Parker", image: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80" },
+                    { name: "Jane Doe", role: "Director", image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80" }
+                ],
+
+                initiateRazorpay() {
+                    const options = {
+                        "key": "rzp_test_YOUR_KEY_HERE",
+                        "amount": 4900, // ₹49
+                        "currency": "INR",
+                        "name": "Spider-Man Fan Film",
+                        "description": "Unlock Full Movie Stream Pass",
+                        "handler": (response) => {
+                            this.hasUnlocked = true;
+                            alert("Payment Successful! Movie stream unlocked.");
+                        },
+                        "theme": { "color": "#E50914" }
+                    };
+                    try {
+                        const rzp = new Razorpay(options);
+                        rzp.open();
+                    } catch(e) {
+                        // Demo fallback if key isn't replaced
+                        if(confirm("Razorpay Test Mode: Unlock movie for testing?")) {
+                            this.hasUnlocked = true;
+                        }
+                    }
+                },
+
+                openVideoPlayer() {
+                    this.showPlayerModal = true;
+                    this.$nextTick(() => {
+                        if(!this.playerInstance) {
+                            this.playerInstance = videojs('fullMoviePlayer');
+                        }
+                        this.playerInstance.play();
+                    });
+                },
+
+                closeVideoPlayer() {
+                    if(this.playerInstance) {
+                        this.playerInstance.pause();
+                    }
+                    this.showPlayerModal = false;
+                }
+            }
+        }
+
+        // Window Scroll Listener for Glass Header Effect
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.classList.add('glassmorphism');
+            } else {
+                header.classList.remove('glassmorphism');
+            }
+        });
+
+        // Initialize Swiper & GSAP Animations
+        document.addEventListener('DOMContentLoaded', () => {
+            new Swiper(".trendingSwiper", {
+                slidesPerView: 1.2,
+                spaceBetween: 16,
+                breakpoints: {
+                    640: { slidesPerView: 2.2 },
+                    1024: { slidesPerView: 3.2 }
+                }
+            });
+
+            // GSAP Entrance Animations
+            gsap.from("#heroTitle", { opacity: 0, y: 30, duration: 1, delay: 0.2 });
+            gsap.from("#heroDesc", { opacity: 0, y: 20, duration: 1, delay: 0.4 });
+            gsap.from("#heroButtons", { opacity: 0, y: 20, duration: 1, delay: 0.6 });
+        });
+    </script>
+</body>
+</html>
